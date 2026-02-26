@@ -16,9 +16,14 @@ Row rules:
 
 - `发帖时间`: parsed local post time, `YYYY-MM-DD HH:mm`.
 - `发帖人`: display name only.
-- `发帖内容`: single-line plain text.
+- `发帖内容`: original post body text in single-line plain text. No paraphrase, no rewriting, no summarizing.
 - `内容总结`: <= 30 Chinese characters, neutral wording.
 - `原始链接`: canonical permalink URL.
+
+Content separation rule:
+
+- `发帖内容` and `内容总结` must not be identical except when the original post body itself is very short.
+- If extracted `发帖内容` is suspiciously short while post has longer body, reopen permalink and re-extract original text.
 
 Sanitization:
 

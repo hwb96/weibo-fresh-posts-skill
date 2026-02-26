@@ -20,6 +20,7 @@ Monitor Weibo's 最新微博 timeline and keep a daily markdown digest that is t
 
 - Always switch to the left-nav `最新微博` timeline before collecting posts.
 - Use the post's own publish time (not crawl time) in output rows.
+- Keep `发帖内容` as original post body text, never as a rewritten summary.
 - Parse relative and absolute time text into local `YYYY-MM-DD HH:mm`.
 - Deduplicate strictly by original post link across the whole daily file.
 - Keep scrolling while the oldest in-window post is still inside the capture window.

@@ -15,11 +15,17 @@
 From visible timeline cards, extract:
 
 - Author name
-- Post text (plain text)
+- Post text original body (plain text, no paraphrase)
 - Original permalink URL
 - Post time text (examples: `刚刚`, `8分钟前`, `3小时前`, `今天 09:12`, `02-26 17:30`, `2026-02-26 17:30`)
 
 Skip cards without permalink URL or parseable post time.
+
+### Post text quality rule (critical)
+
+- `发帖内容` must be original post body text, not a summary sentence.
+- If a card is truncated (`展开`), open the permalink detail and extract full body text first.
+- Only use visible card text when full text cannot be loaded; in that case keep as much original text as available.
 
 ## 3) Parse post time to local datetime
 

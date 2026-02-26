@@ -1,61 +1,60 @@
-# Workflow
+# 抓取流程
 
-## 1) Open Weibo and force 最新微博 timeline
+## 1）打开微博并切换到「最新微博」
 
-1. Open `https://weibo.com` with browser tool options: `profile=openclaw`, `target=host`.
-2. Take a snapshot and locate the left-nav entry labeled `最新微博`.
-3. Click `最新微博`.
-4. Verify success:
-   - URL contains `/mygroups?gid=`.
-   - Left navigation still includes `最新微博`.
-5. If verification fails, retry up to 3 times.
+1. 使用 browser 工具打开 `https://weibo.com`，固定参数：`profile=openclaw`、`target=host`。
+2. snapshot 页面，定位左侧导航 `最新微博`。
+3. 点击 `最新微博`。
+4. 验证进入成功：
+   - URL 包含 `/mygroups?gid=`。
+   - 左侧仍存在 `最新微博` 导航项。
+5. 若验证失败，最多重试 3 次。
 
-## 2) Extract candidate post cards
+## 2）提取帖子候选项
 
-From visible timeline cards, extract:
+从时间线卡片提取：
 
-- Author name
-- Post text original body (plain text, no paraphrase)
-- Original permalink URL
-- Post time text (examples: `刚刚`, `8分钟前`, `3小时前`, `今天 09:12`, `02-26 17:30`, `2026-02-26 17:30`)
+- 发帖人
+- 发帖内容原文正文（纯文本，不改写）
+- 原始链接（permalink）
+- 发帖时间文本（例如：`刚刚`、`8分钟前`、`3小时前`、`今天 09:12`、`02-26 17:30`、`2026-02-26 17:30`）
 
-Skip cards without permalink URL or parseable post time.
+缺失原始链接或时间不可解析的卡片，跳过。
 
-### Post text quality rule (critical)
+### 正文质量规则（关键）
 
-- `发帖内容` must be original post body text, not a summary sentence.
-- If a card is truncated (`展开`), open the permalink detail and extract full body text first.
-- Only use visible card text when full text cannot be loaded; in that case keep as much original text as available.
+- `发帖内容` 必须写原文正文，不得写成总结句。
+- 若出现 `展开/全文` 截断，必须进入原帖详情页提取完整正文后再写入。
+- 若详情页无法打开，退化为可见原文片段，但不能人工改写为摘要。
 
-## 3) Parse post time to local datetime
+## 3）发帖时间解析为本地时间
 
-Output format: `YYYY-MM-DD HH:mm`.
+统一输出：`YYYY-MM-DD HH:mm`。
 
-Rules:
+规则：
 
-- `刚刚` => current local minute
-- `N分钟前` => now - N minutes
-- `N小时前` => now - N hours
-- `今天 HH:mm` => today local date + HH:mm
-- `MM-DD HH:mm` => current year + MM-DD + HH:mm (local timezone)
-- `YYYY-MM-DD HH:mm` => direct local datetime
+- `刚刚` -> 当前本地分钟
+- `N分钟前` -> 当前时间减 N 分钟
+- `N小时前` -> 当前时间减 N 小时
+- `今天 HH:mm` -> 今天日期 + HH:mm
+- `MM-DD HH:mm` -> 当前年份 + MM-DD + HH:mm
+- `YYYY-MM-DD HH:mm` -> 直接使用
 
-## 4) Capture window and scroll strategy
+## 4）窗口与滚动补抓策略
 
-Default interval is 10 minutes; use a 20-minute capture window.
+默认 10 分钟调度，抓取窗口建议 20 分钟。
 
-- Minimum 3 scroll rounds.
-- Maximum 8 scroll rounds.
-- After each round, extract newly appeared cards.
-- Continue scrolling while oldest matched post is still within 20 minutes.
-- Stop when 2 consecutive rounds yield no in-window new posts.
+- 最少滚动 3 轮。
+- 最多滚动 8 轮。
+- 每轮滚动后继续提取新增卡片。
+- 若当前命中的最早帖子仍在 20 分钟窗口内，继续滚动。
+- 连续 2 轮没有窗口内新帖则停止。
 
-## 5) Record and report
+## 5）写入与结果摘要
 
-Write only deduplicated rows (by permalink).
-Return:
+只写入去重后新增行（按原始链接去重），并返回：
 
-- Added row count
-- Output file path
-- Earliest and latest post times among newly added rows
-- Count of skipped cards due to missing/invalid time
+- 新增条数
+- 输出文件路径
+- 本次新增最早/最晚发帖时间
+- 因时间不可解析而跳过的条数

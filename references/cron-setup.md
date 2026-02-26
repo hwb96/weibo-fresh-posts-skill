@@ -1,22 +1,21 @@
-# Cron Setup
+# Cron 组合方式
 
-This skill does not define schedule semantics itself.
-Scheduling is handled by OpenClaw cron.
+Skill 负责“怎么抓”，Cron 负责“什么时候跑”。
 
-## Recommended setup
+## 推荐组合
 
-1. Keep a prompt template in your home directory.
-2. Create an isolated cron job that runs every 10 minutes.
-3. Use a 20-minute capture window in extraction logic for overlap.
+1. 将 Skill 安装到 OpenClaw workspace。
+2. 用隔离会话创建每 10 分钟任务。
+3. 抓取窗口设为最近 20 分钟，做时间重叠补抓。
 
-## Example
+## 示例
 
 ```bash
 openclaw cron add \
   --name "weibo-fresh-posts" \
   --every 10m \
   --session isolated \
-  --message "Use weibo-fresh-posts skill to collect 最新微博 posts and append digest rows." \
+  --message "使用 weibo-fresh-posts 技能：先点最新微博，再按发帖时间抓取并去重写入日报。" \
   --timeout-seconds 240 \
   --no-deliver
 ```

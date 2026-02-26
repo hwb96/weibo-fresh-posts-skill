@@ -11,15 +11,15 @@ PROMPT_FILE="${PROMPT_DIR}/${NAME}.prompt"
 mkdir -p "${PROMPT_DIR}"
 
 cat > "${PROMPT_FILE}" <<PROMPT
-Use weibo-fresh-posts skill.
-Requirements:
-1) Open https://weibo.com with browser profile=openclaw target=host.
-2) Click left-nav 最新微博 before extraction.
-3) Parse post time text to local YYYY-MM-DD HH:mm; never use crawl time.
-4) 发帖内容必须是原始贴文正文，不允许改写成总结句；内容总结单独写在“内容总结”列。
-5) If card body is truncated, open permalink detail and extract full original body text first.
-6) Capture window: recent ${WINDOW} minutes.
-7) Append deduplicated rows by 原始链接 to ~/weibo-digest/YYYY-MM-DD.md.
+使用 weibo-fresh-posts 技能。
+要求：
+1) 使用 browser 的 profile=openclaw、target=host 打开 https://weibo.com。
+2) 抓取前必须点击左侧“最新微博”。
+3) 按发帖时间写入 YYYY-MM-DD HH:mm，禁止使用抓取时间。
+4) 发帖内容列必须写原始贴文正文，不能写成总结。
+5) 若卡片正文被截断，进入原帖详情提取完整正文。
+6) 抓取窗口为最近 ${WINDOW} 分钟。
+7) 按原始链接去重，写入 ~/weibo-digest/YYYY-MM-DD.md。
 PROMPT
 
 openclaw cron add \
@@ -30,5 +30,5 @@ openclaw cron add \
   --timeout-seconds 240 \
   --no-deliver
 
-echo "Created cron job '${NAME}' with interval ${INTERVAL}."
-echo "Prompt file: ${PROMPT_FILE}"
+echo "已创建定时任务 '${NAME}'，间隔 ${INTERVAL}。"
+echo "提示词文件：${PROMPT_FILE}"

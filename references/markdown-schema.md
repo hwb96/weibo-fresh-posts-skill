@@ -1,10 +1,10 @@
-# Markdown Schema
+# Markdown 结构规范
 
-Daily file path:
+每日文件路径：
 
 - `~/weibo-digest/YYYY-MM-DD.md`
 
-Header:
+表头：
 
 ```markdown
 # YYYY-MM-DD 微博关注摘要
@@ -12,26 +12,26 @@ Header:
 |---|---|---|---|---|
 ```
 
-Row rules:
+字段规则：
 
-- `发帖时间`: parsed local post time, `YYYY-MM-DD HH:mm`.
-- `发帖人`: display name only.
-- `发帖内容`: original post body text in single-line plain text. No paraphrase, no rewriting, no summarizing.
-- `内容总结`: <= 30 Chinese characters, neutral wording.
-- `原始链接`: canonical permalink URL.
+- `发帖时间`：本地时区解析后的发帖时间，格式 `YYYY-MM-DD HH:mm`。
+- `发帖人`：显示名。
+- `发帖内容`：原帖正文单行文本（禁止改写、禁止摘要化）。
+- `内容总结`：<= 30 字，客观概括。
+- `原始链接`：帖子 permalink。
 
-Content separation rule:
+字段分离规则：
 
-- `发帖内容` and `内容总结` must not be identical except when the original post body itself is very short.
-- If extracted `发帖内容` is suspiciously short while post has longer body, reopen permalink and re-extract original text.
+- 除非原帖本身极短，否则 `发帖内容` 与 `内容总结` 不能相同。
+- 若 `发帖内容` 明显过短且帖子存在更长正文，需回到原帖详情重新提取正文。
 
-Sanitization:
+文本清洗：
 
-- Replace line breaks with spaces.
-- Escape table separator `|` as `\|`.
-- Collapse repeated whitespace.
+- 换行替换为空格。
+- `|` 转义为 `\|`。
+- 合并多余空白。
 
-Deduplication:
+去重与升级：
 
-- Full-file dedup on `原始链接`.
-- If existing file uses `记录时间` header, upgrade to `发帖时间` while preserving rows.
+- 全文件按 `原始链接` 去重。
+- 若历史文件表头为 `记录时间`，自动升级为 `发帖时间` 并保留历史行。

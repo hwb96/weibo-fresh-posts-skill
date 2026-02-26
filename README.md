@@ -1,41 +1,48 @@
-# weibo-fresh-posts-skill
+# 微博关键信息不漏看（weibo-fresh-posts-skill）
 
-OpenClaw skill for Weibo monitoring with a strict timeline-first workflow:
+这是一个面向中文用户的 OpenClaw Skill，核心要解决的痛点是：
 
-- force click `最新微博`
-- use post timestamp (not crawl timestamp)
-- deduplicate by permalink
-- write daily markdown digest
+- 关注的博主更新太快，经常错过关键微博
+- 刷到的流不稳定，抓取结果不完整
+- 记录里常把“抓取时间”误当“发帖时间”
+- 发帖正文和摘要混在一起，后续复盘困难
 
-## Skill folder
+本 Skill 的策略是：
 
-This repo itself is the skill folder root and includes `SKILL.md`.
+- 强制先切到左侧「最新微博」时间线
+- 以“发帖时间”入表（不是抓取时间）
+- 发帖内容写原文正文，内容总结单独写摘要
+- 按原始链接去重，按天写入本地 Markdown
 
-## Install locally
+## 本仓库内容
+
+本仓库根目录就是 Skill 根目录，包含 `SKILL.md`。
+
+## 本地安装（OpenClaw）
 
 ```bash
 mkdir -p ~/.openclaw/workspace/skills
 cp -R . ~/.openclaw/workspace/skills/weibo-fresh-posts
 ```
 
-## Create recurring cron
+## 创建 10 分钟定时任务
 
 ```bash
 ./scripts/install_cron.sh 10m 20 weibo-fresh-posts
 ```
 
-## Publish to ClawHub
+## 发布到 ClawHub
 
 ```bash
 clawhub login
 clawhub publish "$PWD" \
   --slug weibo-fresh-posts \
-  --name "Weibo Fresh Posts" \
-  --version 0.1.0 \
-  --tags latest,weibo,automation
+  --name "微博关键信息不漏看" \
+  --version 0.1.3 \
+  --tags latest,weibo,automation,zh-cn
 ```
 
-Notes:
+说明：
 
-- On some `clawhub` CLI versions, `clawhub publish .` may incorrectly report `SKILL.md required`.
-- Use `"$PWD"` (absolute path) to avoid that path-resolution issue.
+- 在部分 `clawhub` CLI 版本里，`clawhub publish .` 可能误报 `SKILL.md required`。
+- 使用绝对路径（`"$PWD"`）可规避这个问题。

@@ -28,9 +28,14 @@ cp -R . ~/.openclaw/workspace/skills/weibo-fresh-posts
 
 ```bash
 clawhub login
-clawhub publish . \
+clawhub publish "$PWD" \
   --slug weibo-fresh-posts \
   --name "Weibo Fresh Posts" \
   --version 0.1.0 \
   --tags latest,weibo,automation
 ```
+
+Notes:
+
+- On some `clawhub` CLI versions, `clawhub publish .` may incorrectly report `SKILL.md required`.
+- Use `"$PWD"` (absolute path) to avoid that path-resolution issue.
